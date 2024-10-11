@@ -1,70 +1,37 @@
-# Getting Started with Create React App
+# Banking Dashboard Developer Test
+O objetivo desse desafio era implementar a integracao com a API `https://mock-ica.aquarela.win/api` e criar um dashboard banking para administradores seguindo os requisitos fornecidos
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Solução
+Eu resolvi limitar o escopo da soluçãoo, dado que eu tive pouco tempo disponivel essa semana, de forma que eu pudesse entregar algo funcional e que atingisse os requirementos definidos.
+Para isso, resolvi focar no desenvolvimento do Frontend, utilizando a API provida como Client API (ICA bank API), ao inves de Service API como acredito que deveriamos implementar, se o Backend fosse implementado.
 
-## Available Scripts
+### Solucao ideal
+Idealmente, eu implementaria uma camada de Client API, onde o meu Frontend falaria com meu Backend. Meu Backend por usa vez (Client API), utilizaria a API do ICA bank. Assim eu conseguiria facilmente implementar endpoints não disponiveis no ICA bank, por exemplo: GET /accounts (retorna lista de todas as contas, o que hoje nao esta disponivel na API do ICA). Isso seria possivel se minha Client API armazenasse no meu banco de dados os IDs das contas criadas. Assim, a logica do GET /accounts seria iterar pela lista de IDs, chamando a API do ICA bank atraves de GET /account/id, para buscar todos os detalhes das contas, antes de retornar para o Frontend uma unica resposta, que seria um array de contas e seus detalhes.
 
-In the project directory, you can run:
+### Minha implementação
+1. Como eu nao implementei o Backend, eu utilizei o POST /auth/login para autenticar como se o cliente fosse o usuario, ao inves do meu Backend. Isso nao é ideal, pois esse login deveria autenticar o meu Backend com a API do ICA bank. E o clientID nao é um funcionario do banco, mas o servico cliente (meu Backend).
+Eu implementei assim para demonstra a integracao da API com a tela de login e o gerenciamento do JWT, onde uma vez criado, eu o armazeno no localStorage e o utilizo para as proximas requisicoes, garantindo que as chamadas para a API do ICA bank estejam autenticadas. Similarmente como fariamos se eu tivesse implementado uma API para logar o funcionario.
 
-### `npm start`
+2. Como descrito na Solução ideal, eu nao implementei a camada que armazenaria os IDs das contas criados. Para isso, utilizei o localStorage como simulador do meu banco de dados, armazenando nele o ID de cada conta criada. Assim, eu consigo iterar pela lista de IDs e buscar os detalhes das contas quando inicializar o componente do dashboard.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Como testar
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Pre requisitos:
+1. Clone esse repositorio
+2. Instale as dependencias: `npm i`
+3. Inicialize o projeto: `npm start`
+4. Access o app na URL: `http://localhost:3000`
+5. Importe a collection do postman disponivel no folder `/public`
+Passo a passo:
+1. No postman crie um tenant - voce soh precisa fazer isso uma vez
+2. Na aplicacao, faca o login utilizando o clientId e clientSecret como se fossem as credenciais do funcionario do banco (solucao temporaria para simular o login)
+3. Na aplicacao, crie pelo menos duas contas - para que voce consiga ver as contas e seus detalhes
+4. No postman, faca uma transferencia entre uma conta e outra utilizando a requisicao do postman - isso simula uma transferencia de valores de uma conta a outra realizada pelo cliente do banco
+5. Na aplicacao, click em transacoes, voce podera ver a lsita das operacoes realizadas.
+## Consideracoes
+Em uma proxima iteracao, eu focaria em implementar o Backend, desacoplando a API do ICA bank do nosso Frontend.
+Muito obrigado pela oportinidade de participar desse processo seletivo e compartilhar esse desafio comigo. Foi muito divertido implementar essa primeira parte, e apesar de ter muito coisa para ainda ser implementada, eu espero que voces tambem gostem.
 
-### `npm test`
+Por favor me contate se tiverem alguma duvida.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Obrigado!

@@ -1,0 +1,223 @@
+{
+	"info": {
+		"_postman_id": "9483212d-2bbb-4573-b6cf-11356472da9c",
+		"name": "ICA Bank",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20800843",
+		"_collection_link": "https://grey-star-933115.postman.co/workspace/New-Team-Workspace~aec06793-5700-445c-b031-c1a15b535f94/collection/20800843-9483212d-2bbb-4573-b6cf-11356472da9c?action=share&source=collection_link&creator=20800843"
+	},
+	"item": [
+		{
+			"name": "Create Tenant",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "758603a3-cb1c-4d3f-b4b4-aa8975236894",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Mock",
+						"value": "true",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"clientId\": \"your_client_id\",\n  \"clientSecret\": \"your_client_secret\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://mock-ica.aquarela.win/tenant",
+					"protocol": "https",
+					"host": [
+						"mock-ica",
+						"aquarela",
+						"win"
+					],
+					"path": [
+						"tenant"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"clientId\": \"98b1b947-c020-4337-a3ac-23124465ba9c\",\n  \"clientSecret\": \"8fb82747-a3f0-4f89-a14b-849a864470b0\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://mock-ica.aquarela.win/auth/login",
+					"protocol": "https",
+					"host": [
+						"mock-ica",
+						"aquarela",
+						"win"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Account",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3MjBiNjdiZC0yNGFkLTQzMTgtYWJiYS00ZGNiOTk1ZWFmNWUiLCJjbGllbnRJZCI6Ijk4YjFiOTQ3LWMwMjAtNDMzNy1hM2FjLTIzMTI0NDY1YmE5YyIsImlhdCI6MTcyODUwNDM1MiwiZXhwIjoxNzI4NTA3OTUyfQ.K2gNnMOt91uBdrgN5DBSYXhMUhVh-3EsMYjSNZOyVAA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"accountType\": \"PERSONAL\",\n  \"name\": \"Account Holder Name\",\n  \"document\": \"Document Number\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://mock-ica.aquarela.win/account",
+					"protocol": "https",
+					"host": [
+						"mock-ica",
+						"aquarela",
+						"win"
+					],
+					"path": [
+						"account"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Accounts",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3MjBiNjdiZC0yNGFkLTQzMTgtYWJiYS00ZGNiOTk1ZWFmNWUiLCJjbGllbnRJZCI6Ijk4YjFiOTQ3LWMwMjAtNDMzNy1hM2FjLTIzMTI0NDY1YmE5YyIsImlhdCI6MTcyODUwNDM1MiwiZXhwIjoxNzI4NTA3OTUyfQ.K2gNnMOt91uBdrgN5DBSYXhMUhVh-3EsMYjSNZOyVAA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://mock-ica.aquarela.win/account",
+					"protocol": "https",
+					"host": [
+						"mock-ica",
+						"aquarela",
+						"win"
+					],
+					"path": [
+						"account"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "account statement",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3Y2VhZjc2My1hYTIyLTQwOWMtOTU1Yy04ZmIwZTZlMTVhNTciLCJjbGllbnRJZCI6IjkwNGZlNTVmLWIyNTktNGZhNS1hZDM1LTdkZjZhZTYxNTNkNSIsImlhdCI6MTcyODY3MjIzMSwiZXhwIjoxNzI4Njc1ODMxfQ.8fGfU_QDyGqkAw2kwmJn_hTYAwdBl0K28nWyqsp5SrI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://mock-ica.aquarela.win/account/{id}/statement",
+					"protocol": "https",
+					"host": [
+						"mock-ica",
+						"aquarela",
+						"win"
+					],
+					"path": [
+						"account",
+						"{id}",
+						"statement"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "transaction",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Payer-Id",
+						"value": "document of the payer",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": 0,\r\n    \"sourceAccountId\": \"string\",\r\n    \"targetAccountId\": \"string\",\r\n    \"description\": \"string\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://mock-ica.aquarela.win/transaction/internal",
+					"protocol": "https",
+					"host": [
+						"mock-ica",
+						"aquarela",
+						"win"
+					],
+					"path": [
+						"transaction",
+						"internal"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

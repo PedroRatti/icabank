@@ -15,8 +15,6 @@ const Dashboard = () => {
     const [accountDetails, setUserDetails] = useState(null);
     const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
     const [statemant, setStatemant] = useState([]);
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
     const [noStatemant, setNoStatemant] = useState(false);
 
     useEffect(() => {
@@ -49,7 +47,7 @@ const Dashboard = () => {
                 if (response.ok) {
                     const accountData = await response.json();
                     accountsData.push(accountData);
-                    console.log(accountData, 'contas');
+                    console.log(accountData, 'accounts');
                     
                 } else {
                     console.error(`Error when searching for account with ID: ${id}`);
@@ -61,34 +59,29 @@ const Dashboard = () => {
         setAccounts(accountsData);
     };
 
-    // Função para abrir a janela de criar conta
+    // Function to open the create account window
     const openWindow = () => setIsWindowOpen(true);
 
-    // Função para fechar a janela
+    // Function to close the window
     const closeWindow = () => {
         setIsWindowOpen(false);
     };
 
-    // Função para exibir os detalhes do usuário
+    // Function to display user details
     const openUserDetails = (account) => {
         setUserDetails(account);
         setIsDetailsModalOpen(true);
     };
 
     const closeDetailsModal = () => {
-        setIsDetailsModalOpen(false); // Fecha o modal de detalhes
+        setIsDetailsModalOpen(false); // Close the details modal
     };
 
-    // Função para buscar e abrir o extrato de um usuário
+    // Function to fetch and open a user's statement
     const openStatemant = async (account) => {
         setSelectedUser(account);
 
         let url = `${endpoint}/account/${account.id}/statement`;
-
-        // Adiciona parâmetros de data se estiverem preenchidos
-        if (startDate || endDate) {
-            url += `?${startDate ? `startDate=${startDate}&` : ''}${endDate ? `endDate=${endDate}` : ''}`;
-        }
 
         try {
             const response = await fetch(url, {
@@ -107,15 +100,15 @@ const Dashboard = () => {
                 const data = await response.json();
                 if (data.transactions.length > 0) {
                     setStatemant(data.transactions);
-                    setNoStatemant(false); // Existem transações
+                    setNoStatemant(false); // There are transactions
                 } else {
-                    setNoStatemant(true); // Não há transações
+                    setNoStatemant(true); // No transactions
                 }
             } else {
-                console.error('Erro ao buscar extrato:', response.statusText);
+                console.error('Error fetching statement:', response.statusText);
             }
         } catch (error) {
-            console.error('Erro de conexão ao buscar extrato:', error);
+            console.error('Connection error fetching statement:', error);
         }
 
         setIsStatemantOpen(true);
@@ -156,44 +149,45 @@ const Dashboard = () => {
                     if (data.id) {
                         accountIds.push(data.id);
                         localStorage.setItem('account_ids', JSON.stringify(accountIds));
-                        console.log('IDs das contas salvos no localStorage:', accountIds);
+                        console.log('Account IDs saved to localStorage:', accountIds);
                     }
                     closeWindow();
+                    window.location.reload();
                 } else {
-                    console.error('erro ao criar conta:', data.message);
+                    console.error('Error creating account:', data.message);
                 }
             })
             .catch((error) => {
-                console.error('error', error);
+                console.error('Error', error);
             });
     };
 
-    // Função para somar os saldos
+    // Function to sum the balances
     const totalBalance = accounts.reduce((sum, account) => sum + account.balance, 0);
 
     return (
         <div className="min-h-screen bg-gray-100 p-6">
             <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
-                <h1 className="text-2xl font-bold text-gray-900 mb-6">Painel Bancário - Administração</h1>
+                <h1 className="text-2xl font-bold text-gray-900 mb-6">Bank Dashboard - Administration</h1>
 
-                {/* Botão para criar uma nova conta */}
+                {/* Button to create a new account */}
                 <div className="mb-6">
                     <button
                         onClick={openWindow}
                         className="bg-primary text-black px-4 py-2 rounded-md hover:bg-primary-dark"
                     >
-                        Criar Nova Conta
+                        Create New Account
                     </button>
                 </div>
 
-                {/* Resumo das contas */}
+                {/* Account summary */}
                 <div className="mb-6">
-                    <h2 className="text-lg font-semibold text-gray-700">Resumo das Contas</h2>
-                    <p>Total de contas abertas: {accounts.length}</p>
-                    <p>Total de dinheiro no banco: $ {totalBalance.toFixed(2)}</p>
+                    <h2 className="text-lg font-semibold text-gray-700">Account Summary</h2>
+                    <p>Total accounts: {accounts.length}</p>
+                    <p>Total money in bank: $ {totalBalance.toFixed(2)}</p>
                 </div>
 
-                {/* Lista de usuários */}
+                {/* User list */}
                 <div className="grid grid-cols-1 gap-4 mb-6">
                     {accounts.map((account) => (
                         <div key={account.id} className="p-4 bg-gray-50 border rounded-md shadow-sm relative">
@@ -203,14 +197,14 @@ const Dashboard = () => {
                             <p className="text-gray-700">Document: {account.document}</p>
                             <p className="text-gray-700">Balance: $ {account.balance.toFixed(2)}</p>
 
-                            {/* Botão para visualizar extrato */}
+                            {/* Button to view statement */}
                             <button
                                 onClick={() => openStatemant(account)}
                                 className="text-blue-500 hover:text-blue-700"
                             >
-                                Ver Extrato
+                                View Statement
                             </button>
-                            {/* Botão para exibir detalhes do usuário */}
+                            {/* Button to display user details */}
                             <button
                                 onClick={() => openUserDetails(account)}
                                 className="text-green-500 hover:text-green-700 ml-4"
@@ -224,10 +218,10 @@ const Dashboard = () => {
                 {isDetailsModalOpen && accountDetails && (
                     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
                         <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                            <h2 className="text-xl font-bold mb-4">Detalhes da Conta</h2>
-                            <p><strong>Nome:</strong> {accountDetails.name}</p>
-                            <p><strong>Documento:</strong> {accountDetails.document}</p>
-                            <p><strong>Saldo:</strong> R$ {accountDetails.balance.toFixed(2)}</p>
+                            <h2 className="text-xl font-bold mb-4">Account Details</h2>
+                            <p><strong>Name:</strong> {accountDetails.name}</p>
+                            <p><strong>Document:</strong> {accountDetails.document}</p>
+                            <p><strong>Balance:</strong> $ {accountDetails.balance.toFixed(2)}</p>
                             <p><strong>Account Number:</strong> {accountDetails.number}</p>
 
                             <div className="mt-6 flex justify-end">
@@ -235,22 +229,22 @@ const Dashboard = () => {
                                     onClick={closeDetailsModal}
                                     className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
                                 >
-                                    Fechar
+                                    Close
                                 </button>
                             </div>
                         </div>
                     </div>
                 )}
 
-                {/* Window para adicionar novo usuário */}
+                {/* Window to add new user */}
                 {isWindowOpen && (
                     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
                         <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                            <h2 className="text-xl font-bold mb-4">Criar Nova Conta de Usuário</h2>
+                            <h2 className="text-xl font-bold mb-4">Create New User Account</h2>
                             <form onSubmit={handleSubmit}>
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700">Tipo de Conta</label>
+                                        <label className="block text-sm font-medium text-gray-700">Account Type</label>
                                         <input
                                             type="text"
                                             name="accountType"
@@ -258,7 +252,7 @@ const Dashboard = () => {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700">Nome</label>
+                                        <label className="block text-sm font-medium text-gray-700">Name</label>
                                         <input
                                             type="text"
                                             name="name"
@@ -266,7 +260,7 @@ const Dashboard = () => {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700">Documento</label>
+                                        <label className="block text-sm font-medium text-gray-700">Document</label>
                                         <input
                                             type="text"
                                             name="document"
@@ -281,13 +275,13 @@ const Dashboard = () => {
                                         onClick={closeWindow}
                                         className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
                                     >
-                                        Cancelar
+                                        Cancel
                                     </button>
                                     <button
                                         type="submit"
                                         className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark"
                                     >
-                                        Adicionar Usuário
+                                        Add User
                                     </button>
                                 </div>
                             </form>
@@ -295,15 +289,15 @@ const Dashboard = () => {
                     </div>
                 )}
 
-                {/* Modal para exibir extrato de um usuário */}
+                {/* Modal to display user's statement */}
                 {isStatemantOpen && (
                     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
                         <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                            <h2 className="text-xl font-bold mb-4">Extrato de {selectedUser.name}</h2>
+                            <h2 className="text-xl font-bold mb-4">Statement of {selectedUser.name}</h2>
 
-                            {/* Verifica se há transações */}
+                            {/* Check if there are transactions */}
                             {noStatemant ? (
-                                <p className="text-gray-500">Ainda não há transferências.</p>
+                                <p className="text-gray-500">No transactions yet.</p>
                             ) : (
                                 <ul className="space-y-2">
                                     {statemant.map((item, index) => (
@@ -311,7 +305,7 @@ const Dashboard = () => {
                                             <span>{item.date}</span>
                                             <span>{item.description}</span>
                                             <span>{item.recipientName}</span>
-                                            <span>R$ {item.amount.toFixed(2)}</span>
+                                            <span>$ {item.amount.toFixed(2)}</span>
                                         </li>
                                     ))}
                                 </ul>
@@ -322,7 +316,7 @@ const Dashboard = () => {
                                     onClick={closeStatemant}
                                     className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
                                 >
-                                    Fechar
+                                    Close
                                 </button>
                             </div>
                         </div>
