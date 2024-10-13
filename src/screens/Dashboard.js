@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import AccountDetails from "../components/AccountDetails";
+import NewAccount from "../components/NewAccount";
 
 const Dashboard = () => {
 
@@ -48,12 +51,12 @@ const Dashboard = () => {
                     const accountData = await response.json();
                     accountsData.push(accountData);
                     console.log(accountData, 'accounts');
-                    
+
                 } else {
                     console.error(`Error when searching for account with ID: ${id}`);
                 }
             } catch (error) {
-                console.error(`Connection error when searching for account with ID: ${id}`, error);
+                console.error(`Connection error when searching for account with ID: ${id}, error`);
             }
         }
         setAccounts(accountsData);
@@ -166,164 +169,109 @@ const Dashboard = () => {
     const totalBalance = accounts.reduce((sum, account) => sum + account.balance, 0);
 
     return (
-        <div className="min-h-screen bg-gray-100 p-6">
-            <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
-                <h1 className="text-2xl font-bold text-gray-900 mb-6">Bank Dashboard - Administration</h1>
+        <>
+            <Header />
+            <div className="min-h-screen bg-gray-100 p-6">
+                <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
+                    <h1 className="text-2xl font-bold text-gray-900 mb-6">Bank Dashboard - Administration</h1>
 
-                {/* Button to create a new account */}
-                <div className="mb-6">
-                    <button
-                        onClick={openWindow}
-                        className="bg-primary text-black px-4 py-2 rounded-md hover:bg-primary-dark"
-                    >
-                        Create New Account
-                    </button>
-                </div>
+                    {/* Button to create a new account */}
+                    <div className="mb-6">
+                        <button
+                            onClick={openWindow}
+                            className="bg-primary text-black px-4 py-2 rounded-md hover:bg-primary-dark"
+                        >
+                            Create New Account
+                        </button>
+                    </div>
 
-                {/* Account summary */}
-                <div className="mb-6">
-                    <h2 className="text-lg font-semibold text-gray-700">Account Summary</h2>
-                    <p>Total accounts: {accounts.length}</p>
-                    <p>Total money in bank: $ {totalBalance.toFixed(2)}</p>
-                </div>
+                    {/* Account summary */}
+                    <div className="mb-6">
+                        <h2 className="text-lg font-semibold text-gray-700">Account Summary</h2>
+                        <p>Total accounts: {accounts.length}</p>
+                        <p>Total money in bank: $ {totalBalance.toFixed(2)}</p>
+                    </div>
 
-                {/* User list */}
-                <div className="grid grid-cols-1 gap-4 mb-6">
-                    {accounts.map((account) => (
-                        <div key={account.id} className="p-4 bg-gray-50 border rounded-md shadow-sm relative">
-                            <h2 className="text-lg font-semibold text-gray-900">
-                                {account.name} {account.surname}
-                            </h2>
-                            <p className="text-gray-700">Document: {account.document}</p>
-                            <p className="text-gray-700">Balance: $ {account.balance.toFixed(2)}</p>
+                    {/* User list */}
+                    <div className="grid grid-cols-1 gap-4 mb-6">
+                        {accounts.map((account) => (
+                            <div key={account.id} className="p-4 bg-gray-50 border rounded-md shadow-sm relative">
+                                <h2 className="text-lg font-semibold text-gray-900">
+                                    {account.name} {account.surname}
+                                </h2>
+                                <p className="text-gray-700">Document: {account.document}</p>
+                                <p className="text-gray-700">Balance: $ {account.balance.toFixed(2)}</p>
 
-                            {/* Button to view statement */}
-                            <button
-                                onClick={() => openStatemant(account)}
-                                className="text-blue-500 hover:text-blue-700"
-                            >
-                                View Statement
-                            </button>
-                            {/* Button to display user details */}
-                            <button
-                                onClick={() => openUserDetails(account)}
-                                className="text-green-500 hover:text-green-700 ml-4"
-                            >
-                                Details
-                            </button>
-                        </div>
-                    ))}
-                </div>
-
-                {isDetailsModalOpen && accountDetails && (
-                    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-                        <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                            <h2 className="text-xl font-bold mb-4">Account Details</h2>
-                            <p><strong>Name:</strong> {accountDetails.name}</p>
-                            <p><strong>Document:</strong> {accountDetails.document}</p>
-                            <p><strong>Balance:</strong> $ {accountDetails.balance.toFixed(2)}</p>
-                            <p><strong>Account Number:</strong> {accountDetails.number}</p>
-
-                            <div className="mt-6 flex justify-end">
+                                {/* Button to view statement */}
                                 <button
-                                    onClick={closeDetailsModal}
-                                    className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+                                    onClick={() => openStatemant(account)}
+                                    className="text-blue-500 hover:text-blue-700"
                                 >
-                                    Close
+                                    View Statement
+                                </button>
+                                {/* Button to display user details */}
+                                <button
+                                    onClick={() => openUserDetails(account)}
+                                    className="text-green-500 hover:text-green-700 ml-4"
+                                >
+                                    Details
                                 </button>
                             </div>
-                        </div>
+                        ))}
                     </div>
-                )}
 
-                {/* Window to add new user */}
-                {isWindowOpen && (
-                    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-                        <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                            <h2 className="text-xl font-bold mb-4">Create New User Account</h2>
-                            <form onSubmit={handleSubmit}>
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Account Type</label>
-                                        <input
-                                            type="text"
-                                            name="accountType"
-                                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Name</label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Document</label>
-                                        <input
-                                            type="text"
-                                            name="document"
-                                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
-                                        />
-                                    </div>
-                                </div>
+                    {/* Account Details */}
+                    {isDetailsModalOpen && accountDetails && (
+                        <AccountDetails 
+                            accName={accountDetails.name}
+                            accDocument={accountDetails.document}
+                            accBalance={accountDetails.balance}
+                            accNumber={accountDetails.number}
+                            closeDetailsModal={closeDetailsModal}
+                        />
+                    )}
 
-                                <div className="mt-6 flex justify-end space-x-4">
+                    {/* Window to add new account */}
+                    {isWindowOpen && (
+                        <NewAccount handleSubmit={handleSubmit} closeWindow={closeWindow} />
+                    )}
+
+                    {/* Modal to display account's statement */}
+                    {isStatemantOpen && (
+                        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+                            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+                                <h2 className="text-xl font-bold mb-4">Statement of {selectedUser.name}</h2>
+
+                                {/* Check if there are transactions */}
+                                {noStatemant ? (
+                                    <p className="text-gray-500">No transactions yet.</p>
+                                ) : (
+                                    <ul className="space-y-2">
+                                        {statemant.map((item, index) => (
+                                            <li key={index} className="flex justify-between text-gray-700">
+                                                <span>{item.date}</span>
+                                                <span>{item.description}</span>
+                                                <span>{item.recipientName}</span>
+                                                <span>$ {item.amount.toFixed(2)}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+
+                                <div className="mt-6 flex justify-end">
                                     <button
-                                        type="button"
-                                        onClick={closeWindow}
+                                        onClick={closeStatemant}
                                         className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
                                     >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark"
-                                    >
-                                        Add User
+                                        Close
                                     </button>
                                 </div>
-                            </form>
-                        </div>
-                    </div>
-                )}
-
-                {/* Modal to display user's statement */}
-                {isStatemantOpen && (
-                    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-                        <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                            <h2 className="text-xl font-bold mb-4">Statement of {selectedUser.name}</h2>
-
-                            {/* Check if there are transactions */}
-                            {noStatemant ? (
-                                <p className="text-gray-500">No transactions yet.</p>
-                            ) : (
-                                <ul className="space-y-2">
-                                    {statemant.map((item, index) => (
-                                        <li key={index} className="flex justify-between text-gray-700">
-                                            <span>{item.date}</span>
-                                            <span>{item.description}</span>
-                                            <span>{item.recipientName}</span>
-                                            <span>$ {item.amount.toFixed(2)}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-
-                            <div className="mt-6 flex justify-end">
-                                <button
-                                    onClick={closeStatemant}
-                                    className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
-                                >
-                                    Close
-                                </button>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

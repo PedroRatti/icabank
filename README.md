@@ -21,7 +21,7 @@ Pre requisitos:
 2. Instale as dependencias: `npm i`
 3. Inicialize o projeto: `npm start`
 4. Access o app na URL: `http://localhost:3000`
-5. Importe a collection do postman disponivel no folder `/public`
+5. Importe a collection do postman disponivel no folder `/postman`
 Passo a passo:
 1. No postman crie um tenant - voce soh precisa fazer isso uma vez
 2. Na aplicacao, faca o login utilizando o clientId e clientSecret como se fossem as credenciais do funcionario do banco (solucao temporaria para simular o login)

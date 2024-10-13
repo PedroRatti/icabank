@@ -1,47 +1,28 @@
 const Header = () => {
+
+  const logOut = () => {
+    localStorage.removeItem('access_token');
+    window.location.reload();
+  }
+
     return (
       <header className="bg-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            {/* Logo */}
             <div className="flex-shrink-0">
               <img
-                src="https://icabank.com.br/static/media/Logo.6e249b4f.svg" // Substitua pela sua logo
+                src="https://icabank.com.br/static/media/Logo.6e249b4f.svg"
                 alt="Logo"
                 className="h-8 w-auto"
               />
             </div>
   
-            {/* Navegação */}
-            <nav className="hidden md:flex space-x-8">
-              <a
-                href="#home"
-                className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Home
-              </a>
-              <a
-                href="#contact"
-                className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Contato
-              </a>
-              <a
-                href="#about"
-                className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Sobre
-              </a>
-            </nav>
-  
-            {/* Botão de Logout */}
             <div className="hidden md:block">
-              <button className="bg-primary text-black px-4 py-2 rounded-md shadow-sm hover:bg-opacity-90">
+              <button className="bg-primary text-black px-4 py-2 rounded-md shadow-sm hover:bg-opacity-90" onClick={logOut}>
                 Logout
               </button>
             </div>
   
-            {/* Menu para mobile */}
             <div className="md:hidden">
               <button
                 className="text-gray-900"
@@ -67,32 +48,6 @@ const Header = () => {
           </div>
         </div>
   
-        {/* Menu para mobile (quando aberto) */}
-        <div className="md:hidden">
-          <nav className="space-y-1 px-2 pb-3 pt-2">
-            <a
-              href="#home"
-              className="block text-gray-900 hover:bg-primary hover:text-white px-3 py-2 rounded-md text-base font-medium"
-            >
-              Home
-            </a>
-            <a
-              href="#contact"
-              className="block text-gray-900 hover:bg-primary hover:text-white px-3 py-2 rounded-md text-base font-medium"
-            >
-              Contato
-            </a>
-            <a
-              href="#about"
-              className="block text-gray-900 hover:bg-primary hover:text-white px-3 py-2 rounded-md text-base font-medium"
-            >
-              Sobre
-            </a>
-            <button className="w-full bg-primary text-white px-4 py-2 rounded-md shadow-sm hover:bg-opacity-90">
-              Logout
-            </button>
-          </nav>
-        </div>
       </header>
     );
   };
